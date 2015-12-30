@@ -1,3 +1,4 @@
+// ttc main procedures.
 if (ttcGame === undefined) {
     var ttcGame = {};
 }
@@ -10,4 +11,5 @@ $(document).ready(function(){
     var height = canvas.height;
 
     ttcGame.createRandomCircles(width, height);
+    ttcGame.connectCircles();
 });
