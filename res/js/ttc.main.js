@@ -12,4 +12,13 @@ $(document).ready(function(){
 
     ttcGame.createRandomCircles(width, height);
     ttcGame.connectCircles();
+
+	setInterval(mainloop, 30);
+
+	function mainloop() {
+		ttcGame.handleInput();
+		ttcGame.clear();
+		ttcGame.drawAllLines();
+		ttcGame.drawAllCircles();
+	}
 });
