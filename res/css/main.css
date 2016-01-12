@@ -1,4 +1,40 @@
+body {
+	font: 18px serif;
+	color: #555555;
+	background: #eeeeee;
+	margin: 0px;
+	padding: 0px;
+
+}
 
 canvas {
-    background: grey;
+	background: grey;
+	padding: 0px;
+	margin: 0px;
+	display: block;
+}
+
+div {
+	padding: 0px;
+	margin: 0px;
+}
+
+a {
+	color: #4477fe;
+}
+a.back {
+	text-decoration: none;
+}
+
+header,footer {
+	font-size: 26px;
+	background: #cccccc;
+	padding: 10px;
+	margin: 0px;
+	text-align: left;
+	vertical-align: middle;
+}
+article {
+	padding: 0px;
+	margin: 0px;
 }

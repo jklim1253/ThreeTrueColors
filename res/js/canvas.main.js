@@ -2,21 +2,8 @@
 
 window.addEventListener("load", eventWindowLoaded, false);
 
-var Debugger = function() {};
-Debugger.log = function(msg) {
-	try {
-		console.log(msg);
-	}
-	catch (exception) {
-		return;
-	}
-}
-
 function eventWindowLoaded() {
 	MainApp();
-}
-function canvasSupport() {
-	return Modernizr.canvas;
 }
 function MainApp() {
 	if (!canvasSupport) {
