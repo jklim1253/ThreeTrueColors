@@ -8,29 +8,92 @@
 	<link rel="stylesheet" href="res/css/main.css">
 </head>
 <body>
-	<header>
-		Three True Colors
-	</header>
+<header>
+	<a class="back" href="index.html">Game Board</a>/Test
+</header>
+<article>
 
-	<script>
-var name;
-if ((name=prompt("what your name?", "anonymous")) == undefined)
-	name = "anonymous";
-switch(name) {
-	case "jklim" :
-		alert("Hello Master");
-		break;
-	default :
-		alert("Hello " + name);
-		break;
-}
-for (var i = 1; i <= 12; ++i) {
-	document.write("12 * " + i + " = " + 12*i + "<br/>");
-}
-	</script>
+	<div>
+	<canvas id="screen" width="400" height="400">
+		Your browser do not support HTML5 canvas.
+	</canvas>
+	</div>
 
-	<footer>
-		copyright &copy; jklim.
-	</footer>
+</article>
+<footer>
+	copyright &copy; jklim.
+</footer>
+<script src="res/js/modernizr-custom.js"></script>
+<script src="res/js/common.js"></script>
+<script>
+window.addEventListener("load", eventWindowLoaded, false);
+
+function eventWindowLoaded() {
+	MainApp();
+}
+function MainApp() {
+	if (!canvasSupport) {
+		return;
+	}
+
+	var canvas = document.getElementById("screen");
+	var context = canvas.getContext("2d");
+
+	canvas.addEventListener("mousemove", eventMouseMove, false);
+
+	var x=-100,y=-100;
+	function eventMouseMove(e) {
+//		Debugger.log("MouseMove event called.");
+		x = e.pageX - canvas.offsetLeft;
+		y = e.pageY - canvas.offsetTop;
+
+		drawScreen();
+	}
+
+	function drawSome() {
+		context.fillStyle="#aaeeaa";
+
+		context.save();
+		context.beginPath();
+//		context.rect(x-50,y-50,100,100);
+		context.arc(x,y,50,D2R(0),D2R(360));
+		context.clip();
+		context.closePath();
+
+		context.beginPath();
+//		context.arc(200,200,50,D2R(0),D2R(270),false);
+//		context.moveTo(200,200);
+//		context.lineTo(200,300);
+//		context.bezierCurveTo(300,300,300,200,400,200);
+//		context.stroke();
+		for (var i = 0; i < canvas.width; i+=50) {
+			context.moveTo(i, 0);
+			context.lineTo(i, canvas.height);
+		}
+		for (var i = 0; i < canvas.height; i+=50) {
+			context.moveTo(0, i);
+			context.lineTo(canvas.width, i);
+		}
+		context.stroke();
+		context.closePath();
+
+		context.restore();
+
+	}
+	function drawScreen () {
+		context.fillStyle = "#eeeeee";
+		context.strokeStyle = "#eeaaaa";
+		context.lineWidth = 10;
+		context.lineCap = 'butt';
+		context.lineJoin = 'sqaure';
+		context.clearRect(0,0,canvas.width,canvas.height);
+		context.strokeRect(5,5,canvas.width-10,canvas.height-10);
+
+		drawSome();
+	}
+
+	drawScreen();
+}
+</script>
 </body>
 </html>

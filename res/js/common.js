@@ -13,3 +13,6 @@ Debugger.log = function(msg) {
 function canvasSupport() {
 	return Modernizr.canvas;
 }
+function D2R(degree) {
+	return degree*Math.PI/180;
+}
