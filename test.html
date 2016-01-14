@@ -43,10 +43,16 @@ function MainApp() {
 
 	var bgcolor = "#7777ee";
 	var x=100,y=100;
+	var angle=0;
 	function eventMouseMove(e) {
 //		Debugger.log("MouseMove event called.");
 		x = e.pageX - canvas.offsetLeft;
 		y = e.pageY - canvas.offsetTop;
+
+		angle += 1;
+		if (angle > 360) {
+			angle = 0;
+		}
 
 		drawScreen();
 	}
@@ -111,7 +117,7 @@ function MainApp() {
 		context.save();
 
 		context.globalAlpha=.5;
-		
+
 		context.beginPath();
 		context.moveTo(canvas.width, 0);
 		context.lineTo(0, canvas.height);
@@ -120,11 +126,80 @@ function MainApp() {
 
 		context.restore();
 
+		context.save();
 		context.fillStyle="#aaeeaa";
+
 		context.beginPath();
-		context.rect(150,150, 100,100);
+		//context.setTransform(1,0,0,1,0,0);
+		//context.translate(200,200);
+		context.rotate(D2R(-angle));
+		context.rect(100,100, 100,100);
+		context.fill();
+		context.rotate(D2R(30));
+		context.rect(100,100, 100,100);
+		context.fill();
+		context.rotate(D2R(30));
+		context.rect(100,100, 100,100);
+		context.fill();
+		context.fillStyle="#000000";
+		context.fillText("1",150,150);
+		context.closePath();
+
+		context.restore();
+
+		context.save();
+
+		context.setTransform(1,0,0,1,0,0);
+		context.translate(200,200);
+		context.rotate(D2R(angle));
+		context.fillStyle = "orange";
+
+		// 태극마크
+		context.save();
+
+		//context.globalAlpha = .5;
+
+		context.beginPath();
+		context.arc(0,0,50,D2R(0),D2R(180),true);
+		context.closePath();
+		context.fillStyle="red";
+		context.fill();
+		context.beginPath();
+		context.arc(0,0,50,D2R(0),D2R(180),false);
+		context.arc(25,0,25,D2R(0),D2R(180),true);
+		context.closePath();
+		context.fillStyle="blue";
+		context.fill();
+		context.beginPath();
+		context.arc(-25,0,25,D2R(0),D2R(360),false);
+		context.closePath();
+		context.fillStyle="red";
+		context.fill();
+		context.restore();
+
+		// star.
+		context.save();
+
+		context.globalAlpha = .5;
+
+		context.rotate(D2R(-90));
+		context.beginPath();
+		context.moveTo(50,0);
+		for (var i = 0; i < 10; i++) {
+			context.rotate(D2R(36));
+			if (i%2 == 0) {
+				context.lineTo(50*2/5, 0);
+			}
+			else {
+				context.lineTo(50,0);
+			}
+		}
 		context.closePath();
 		context.fill();
+
+		context.restore();
+
+		context.restore();
 
 	}
 	function drawScreen () {
