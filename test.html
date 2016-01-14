@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>
-		Three True Colors
+		Move object with Keyboard.
 	</title>
 	<link rel="stylesheet" href="res/css/main.css">
 </head>
@@ -39,169 +39,41 @@ function MainApp() {
 	var canvas = document.getElementById("screen");
 	var context = canvas.getContext("2d");
 
-	canvas.addEventListener("mousemove", eventMouseMove, false);
+	var bgcolor = "rgb(100,120,200)";
 
-	var bgcolor = "#7777ee";
-	var x=100,y=100;
-	var angle=0;
-	function eventMouseMove(e) {
-//		Debugger.log("MouseMove event called.");
-		x = e.pageX - canvas.offsetLeft;
-		y = e.pageY - canvas.offsetTop;
+	function drawObject(x, y, size, angle, color) {
+		context.save();
+		context.translate(x, y);
+		context.rotate(D2R(angle));
 
-		angle += 1;
-		if (angle > 360) {
-			angle = 0;
-		}
+		context.beginPath();
+		context.rect(-size/2,-size/2,size,size);
+		context.moveTo(-size/2,0);
+		context.lineTo(-size/2,-size);
+		context.moveTo(size/2,0);
+		context.lineTo(size/2,-size);
+		context.closePath();
 
-		drawScreen();
+		context.fillStyle = color;
+		context.strokeStyle = color;
+		context.fill();
+		context.stroke();
+		context.restore();
 	}
-
 	function drawSome() {
 
-		// 지금까지의 canvas 상태를 저장하고
-		// canvas 초기값으로 만들어 준다.
-		// clip 하기전에 호출하는 이유는
-		// mousemove 이벤트로 인해 clip이 여러번 호출되는데
-		// clip의 처리 방식이 AND연산으로 clip되기때문에
-		// 원하는 결과를 얻을 수가 없다.
-		// clip 처리 결과를 단독으로 처리하기 위해
-		// 상태를 save하여 초기화된 곳에 clip결과를 canvas에 뿌려준 뒤
-		// restore를 통해서 상태를 되돌린다.
-		// 되돌릴때 canvas에 그려진 결과는 되돌려지지 않는다.
-		// 그리는 명령이 한번만 호출될 때에는 save를 안해도 결과는 같다.
-		// 그리는 명령이 여러번 일때에는 반드시 save를 해줘야 한다.
-		// clip을 사용하면 save를 사용하고 해주는 것을 습관화하면 좋다.
-		context.save();
+		// ctx.createLinearGradient(sp_x1,sp_y1,ep_x1,ep_y1)
+		var gr = context.createLinearGradient(0,-25,0,25);
+		// CanvasGradient.addColorStop(offset, color);
+		// offset is value of between 0 and 1. if not INDEX_SIZE_ERR is raised.
+		// color is parsed as a CSS<color>. if not SYNTAX_ERR is raised.
+		gr.addColorStop(0, "rgb(200,100,100)");
+		gr.addColorStop(0.5, "rgb(100,200,100)");
+		gr.addColorStop(1, "rgb(100,100,200)");
 
-		// clip할 path을 설정한다.
-		// drawing 명령이 없으므로 설정한 path만이 clip된다.
-		context.beginPath();
-		context.rect(x,y,100,100);
-		context.arc(x,y,50,D2R(0),D2R(360));
-		// closePath는 지금까지 설정한 path의 끝점을 시작점으로
-		// 이동시킬 뿐, 이후에 나오는 path 명령들과 별개가 되지 않는다.
-		// 이후에 나오는 path명령들과 별개가 되기 위해서는
-		// 이후에 나오는 path명령 이전에 beginPath를 이용해서
-		// 새로운 path를 만들어주어야 구분되어 진다.
-		context.closePath();
-		// clip된 path는 canvas에 실제로 그려지지 않는다.
-		// 또한 clip된 path는 새로 추가된 모형에 의해서도 영향을 받지 않는다.
-		// clip호출 이전에 설정된 하나의 path에 대해서만 clip이 적용된다.
-		// 두개의 모형이 따로따로 path로 지정되어 있으면
-		// clip 바로이전에 지정된 path만이 clip 적용된다.
-		// 각 path마다 clip을 호출하면 clipping path는 AND연산처리된다.
-		// OR연산된 clipping path를 원한다면
-		// 그 모형들을 하나의 path로 묶어주면 모두 clip이 적용된다.
-		context.clip();
-
-		// 격자형을 그릴 path를 설정한다.
-		// beginPath는 이전까지 있던 path관련 명령들과 구분하여
-		// 새로운 path를 만든다.
-		// path drawing 명령어들은 current path에만 적용된다.
-		context.beginPath();
-		for (var i = 0; i < canvas.width; i+=50) {
-			context.moveTo(i, 0);
-			context.lineTo(i, canvas.height);
-		}
-		for (var i = 0; i < canvas.height; i+=50) {
-			context.moveTo(0, i);
-			context.lineTo(canvas.width, i);
-		}
-		context.closePath();
-		context.stroke();
-
-		// restore되면서 clip영역은 끝.
-		context.restore();
-
-		context.save();
-
-		context.globalAlpha=.5;
-
-		context.beginPath();
-		context.moveTo(canvas.width, 0);
-		context.lineTo(0, canvas.height);
-		context.closePath();
-		context.stroke();
-
-		context.restore();
-
-		context.save();
-		context.fillStyle="#aaeeaa";
-
-		context.beginPath();
-		//context.setTransform(1,0,0,1,0,0);
-		//context.translate(200,200);
-		context.rotate(D2R(-angle));
-		context.rect(100,100, 100,100);
-		context.fill();
-		context.rotate(D2R(30));
-		context.rect(100,100, 100,100);
-		context.fill();
-		context.rotate(D2R(30));
-		context.rect(100,100, 100,100);
-		context.fill();
-		context.fillStyle="#000000";
-		context.fillText("1",150,150);
-		context.closePath();
-
-		context.restore();
-
-		context.save();
-
-		context.setTransform(1,0,0,1,0,0);
-		context.translate(200,200);
-		context.rotate(D2R(angle));
-		context.fillStyle = "orange";
-
-		// 태극마크
-		context.save();
-
-		//context.globalAlpha = .5;
-
-		context.beginPath();
-		context.arc(0,0,50,D2R(0),D2R(180),true);
-		context.closePath();
-		context.fillStyle="red";
-		context.fill();
-		context.beginPath();
-		context.arc(0,0,50,D2R(0),D2R(180),false);
-		context.arc(25,0,25,D2R(0),D2R(180),true);
-		context.closePath();
-		context.fillStyle="blue";
-		context.fill();
-		context.beginPath();
-		context.arc(-25,0,25,D2R(0),D2R(360),false);
-		context.closePath();
-		context.fillStyle="red";
-		context.fill();
-		context.restore();
-
-		// star.
-		context.save();
-
-		context.globalAlpha = .5;
-
-		context.rotate(D2R(-90));
-		context.beginPath();
-		context.moveTo(50,0);
-		for (var i = 0; i < 10; i++) {
-			context.rotate(D2R(36));
-			if (i%2 == 0) {
-				context.lineTo(50*2/5, 0);
-			}
-			else {
-				context.lineTo(50,0);
-			}
-		}
-		context.closePath();
-		context.fill();
-
-		context.restore();
-
-		context.restore();
-
+		drawObject(canvas.width/2, canvas.height/2, 50, 0, gr);
 	}
+
 	function drawScreen () {
 		context.fillStyle = bgcolor;
 		context.strokeStyle = "#eeaaaa";
@@ -209,15 +81,7 @@ function MainApp() {
 		context.lineCap = 'butt';
 		context.lineJoin = 'sqaure';
 
-		// 시작점(0,0)과 크기(canvas.width,canvas.height)로 정의된
-		// 사각형의 영역안에 있는 모든 픽셀을
-		// 기존에 그려져 있던 결과물들을 지우면서
-		// 투명한 검정색으로 설정한다.
-		// 패스를 제거하지는 않는다.
-		// canvas에 그려진 결과물만을 지울뿐이다.
 		context.clearRect(0,0,canvas.width,canvas.height);
-		// 호출전 가장 최근에 지정된 fillStyle에 지정된 값으로
-		// 지정된 사각형의 영역을 채운다.
 		context.fillRect(0,0,canvas.width,canvas.height);
 		context.strokeRect(5,5,canvas.width-10,canvas.height-10);
 
