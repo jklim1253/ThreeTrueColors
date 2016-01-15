@@ -8,7 +8,7 @@ Debugger.log = function(msg) {
 	catch (exception) {
 		return;
 	}
-}
+};
 
 function canvasSupport() {
 	return Modernizr.canvas;

@@ -25,6 +25,7 @@
 </footer>
 <script src="res/js/modernizr-custom.js"></script>
 <script src="res/js/common.js"></script>
+<script src="res/js/vector.js"></script>
 <script>
 window.addEventListener("load", eventWindowLoaded, false);
 
@@ -38,6 +39,55 @@ function MainApp() {
 
 	var canvas = document.getElementById("screen");
 	var context = canvas.getContext("2d");
+
+	document.addEventListener("keydown", eventKeyDown, true);
+	document.addEventListener("keyup", eventKeyUp, true);
+
+	var KeyBoardStatic = function(){
+		this.Enter = 13;
+		this.Tab = 9;
+		this.Esc = 27;
+		this.Space = 32;
+		this.Backspace = 8;
+		this.Shift = 16;
+		this.Control = 17;
+		this.Alt = 18;
+		this.Capslock = 20;
+		this.Numlock = 144;
+		this.Num0 = 48;
+		this.Num1 = 49;
+		this.Numplus = 107;
+		this.Numminus = 109;
+		this.PageUp = 33;
+		this.PageDown = 34;
+		this.A = 65;
+		this.B = 66;
+		this.C = 67;
+		this.D = 68;
+		this.E = 69;
+		this.F = 70;
+		this.G = 71;
+		this.H = 72;
+		this.I = 73;
+		this.S = 83;
+		this.W = 87;
+	}
+	var Keyboard = new KeyBoardStatic();
+	var KeyState = [];
+
+	var object = new Vector(canvas.width/2,canvas.height/2);
+	var angle = 0;
+	var mpp = 5; // move per press
+	var rpp = 1; // rotate per press
+	var fps = 0;
+
+	function eventKeyUp(e) {
+		KeyState[e.keyCode] = false;
+	}
+
+	function eventKeyDown(e) {
+		KeyState[e.keyCode] = true;
+	}
 
 	var bgcolor = "rgb(100,120,200)";
 
@@ -71,7 +121,17 @@ function MainApp() {
 		gr.addColorStop(0.5, "rgb(100,200,100)");
 		gr.addColorStop(1, "rgb(100,100,200)");
 
-		drawObject(canvas.width/2, canvas.height/2, 50, 0, gr);
+		drawObject(object.x, object.y, 50, angle, gr);
+	}
+	function drawui() {
+		context.save();
+		context.fillStyle = "#fe5544";
+		context.font = "14px Arial";
+		context.textBaseline = "top";
+		context.fillText("mpp : " + mpp + " move/press", 20, 20);
+		context.fillText("rpp : " + rpp + " rotate/press", 20, 35);
+		context.fillText("FPS : " + fps + " frame/second", 200, 20);
+		context.restore();
 	}
 
 	function drawScreen () {
@@ -85,10 +145,63 @@ function MainApp() {
 		context.fillRect(0,0,canvas.width,canvas.height);
 		context.strokeRect(5,5,canvas.width-10,canvas.height-10);
 
+		drawui();
 		drawSome();
 	}
 
-	drawScreen();
+	function inputProcess() {
+		if (KeyState[Keyboard.W]) {
+			object.x += mpp*Math.sin(D2R(angle));
+			object.y -= mpp*Math.cos(D2R(angle));
+		}
+		if (KeyState[Keyboard.S]) {
+			object.x -= mpp*Math.sin(D2R(angle));
+			object.y += mpp*Math.cos(D2R(angle));
+		}
+		if (KeyState[Keyboard.A]) {
+			angle -= rpp;
+			if (angle <= -360) {
+				angle = 0;
+			}
+		}
+		if (KeyState[Keyboard.D]) {
+			angle += rpp;
+			if (angle >= 360) {
+				angle = 0;
+			}
+		}
+		if (KeyState[Keyboard.Enter] || KeyState[Keyboard.Space]) {
+			object.x = canvas.width/2;
+			object.y = canvas.height/2;
+			angle = 0;
+		}
+		if (KeyState[Keyboard.Numplus]) {
+			mpp += 1;
+		}
+		if (KeyState[Keyboard.Numminus]) {
+			mpp -= 1;
+			if (mpp < 1) {
+				mpp = 1;
+			}
+		}
+		if (KeyState[Keyboard.PageUp]) {
+			rpp += 1;
+		}
+		if (KeyState[Keyboard.PageDown]) {
+			rpp -= 1;
+			if (rpp < 1) {
+				rpp = 1;
+			}
+		}
+	}
+
+	function mainloop() {
+		inputProcess();
+		drawScreen();
+		setTimeout(mainloop, 1000/24);
+	}
+
+	mainloop();
 }
 </script>
 </body>
