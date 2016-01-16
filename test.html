@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>
+		Test
+	</title>
+	<link rel="stylesheet" href="res/css/main.css">
+</head>
+<body>
+<script src="res/js/modernizr-custom.js"></script>
+<script src="res/js/common.js"></script>
+<script src="res/js/vector.js"></script>
+<script>
+var Cell = function(x, y, life) {
+	this.x = x;
+	this.y = y;
+	this.life = life;
+};
+Cell.prototype.deepCopy = function() {
+	return new Cell(this.x, this.y, this.life);
+};
+var test = [];
+for (var x = 0; x < 10; x++) {
+	var vline = [];
+	for (var y = 0; y < 10; y++) {
+		vline.push(new Cell(x, y, false));
+	}
+	test.push(vline);
+}
+document.write("test length is " + test.length + "<br/>");
+document.write("test[0] length is " + test[0].length + "<br/>");
+
+function print(arr) {
+	for (var y = 0; y < 10; y++) {
+		for (var x = 0; x < 10; x++) {
+			if (arr[x][y].life) {
+				document.write("T ");
+			}
+			else {
+				document.write("F ");
+			}
+		}
+		document.write("<br/>");
+	}
+	document.write("<hr>");
+}
+
+function deepcopy(src, dest) {
+	for (var y = 0; y < 10; y++) {
+		var vline = [];
+		for (var x = 0; x < 10; x++) {
+			vline.push(src[x][y].deepCopy());
+		}
+		dest.push(vline);
+	}
+}
+print(test);
+
+var foo = [];
+
+deepcopy(test, foo);
+test[1][1].life = true;
+
+print(foo);
+print(test);
+</script>
+</body>
+</html>
