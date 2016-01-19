@@ -6,6 +6,22 @@
 		Test
 	</title>
 	<link rel="stylesheet" href="res/css/main.css">
+<style>
+div.cell-alive, div.cell-death {
+	margin: 0px;
+	padding: 0px;
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	float: left;
+}
+div.cell-alive {
+	background-color: #555555;
+}
+div.cell-death {
+	background-color: #dddddd;
+}
+</style>
 </head>
 <body>
 <script src="res/js/modernizr-custom.js"></script>
@@ -24,10 +40,10 @@ Cell.prototype.deepCopy = function() {
 };
 Cell.prototype.draw = function() {
 	if (this.life) {
-		document.write("<p style='float:left;display:block;width:10px; height:10px;background:"+Cell.styleAlive+"'></p>");
+		document.write("<div class='cell-alive'></div>");
 	}
 	else {
-		document.write("<p style='float:left;display:display;width:10px; height:10px;background:"+Cell.styleDeath+"'></p>");
+		document.write("<div class='cell-death'></div>");
 	}
 };
 var test = [];
