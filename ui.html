@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>
+		Game Title
+	</title>
+	<link rel="stylesheet" href="res/css/main.css">
+</head>
+<body>
+<header>
+	<a class="back" href="index.html">Game Board</a>/<div id="title">Game Title</div>
+</header>
+<article>
+
+	<div>
+	<canvas id="screen" width="400" height="400">
+		Your browser do not support HTML5 canvas.
+	</canvas>
+	</div>
+
+</article>
+<footer>
+	copyright &copy; jklim.
+</footer>
+
+<script src="res/js/modernizr-custom.js"></script>
+<script src="res/js/common.js"></script>
+<script src="res/js/vector.js"></script>
+<script src="res/js/input.js"></script>
+<script>
+window.addEventListener("load", eventWindowLoaded, false);
+function eventWindowLoaded(e) {
+	var mainapp = new AppMain();
+	mainapp.run();
+}
+var AppMain = function(){
+	this.title = "Game Title";
+	this.width = 400;
+	this.height = 400;
+	this.canvas = document.getElementById("screen");
+	this.context = this.canvas.getContext("2d");
+};
+AppMain.prototype.initiailize = function() {
+};
+AppMain.prototype.mainloop = function() {
+	this.inputProcess();
+	this.updateScreen();
+	this.drawScreen();
+};
+AppMain.prototype.run = function() {
+	this.initialize();
+	this.mainloop();
+};
+</script>
+</body>
+</html>

@@ -13,12 +13,22 @@
 <script src="res/js/vector.js"></script>
 <script>
 var Cell = function(x, y, life) {
-	this.x = x;
-	this.y = y;
-	this.life = life;
+	this.x = parseInt(x);
+	this.y = parseInt(y);
+	this.life = (life == true? true : false);
 };
+Cell.styleDeath = "#dddddd";
+Cell.styleAlive = "#555555";
 Cell.prototype.deepCopy = function() {
 	return new Cell(this.x, this.y, this.life);
+};
+Cell.prototype.draw = function() {
+	if (this.life) {
+		document.write("<p style='float:left;display:block;width:10px; height:10px;background:"+Cell.styleAlive+"'></p>");
+	}
+	else {
+		document.write("<p style='float:left;display:display;width:10px; height:10px;background:"+Cell.styleDeath+"'></p>");
+	}
 };
 var test = [];
 for (var x = 0; x < 10; x++) {
@@ -34,12 +44,13 @@ document.write("test[0] length is " + test[0].length + "<br/>");
 function print(arr) {
 	for (var y = 0; y < 10; y++) {
 		for (var x = 0; x < 10; x++) {
-			if (arr[x][y].life) {
-				document.write("T ");
-			}
-			else {
-				document.write("F ");
-			}
+//			if (arr[x][y].life) {
+//				document.write("T ");
+//			}
+//			else {
+//				document.write("F ");
+//			}
+			arr[x][y].draw();
 		}
 		document.write("<br/>");
 	}
@@ -64,6 +75,11 @@ test[1][1].life = true;
 
 print(foo);
 print(test);
+
+foo[0][0].draw();
+
+document.write("style of death is " + Cell.styleDeath);
+document.write("style of alive is " + Cell.styleAlive);
 </script>
 </body>
 </html>

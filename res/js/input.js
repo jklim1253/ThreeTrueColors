@@ -27,5 +27,9 @@ var KeyBoardStatic = function(){
 	this.S = 83;
 	this.W = 87;
 };
-var KeyBoard = new KeyBoardStatic();
+AppMain.KeyBoard = new KeyBoardStatic();
+AppMain.keyState = [];
+AppMain.clickState = [];
 
+AppMain.prototype.inputProcess = function() {
+};
