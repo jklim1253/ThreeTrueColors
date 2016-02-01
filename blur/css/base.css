@@ -1,0 +1,14 @@
+body {
+	margin: 0px;
+	padding: 0px;
+}
+div#container {
+	float: left;
+	margin: 10px;
+	padding: 0px;
+	box-shadow: 0px 0px 5px 5px grey;
+}
+canvas {
+	float: left;
+	background-color: #eeeeee;
+}
